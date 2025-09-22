@@ -13,7 +13,7 @@ SELECT
 FROM (
   SELECT
     client,
-    REGEXP_EXTRACT(summary.respOtherHeaders, r'(?i)strict-transport-security =([^,]+)') AS hsts_header_val
+    REGEXP_EXTRACT(STRING(summary.respOtherHeaders), r'(?i)strict-transport-security =([^,]+)') AS hsts_header_val
   FROM
     `httparchive.crawl.requests`
   WHERE

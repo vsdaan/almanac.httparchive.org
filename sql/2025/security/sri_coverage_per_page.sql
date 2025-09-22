@@ -12,7 +12,7 @@ SELECT
 FROM (
   SELECT
     client,
-    JSON_EXTRACT_ARRAY(custom_metrics.security, '$.sri-integrity') AS sris,
+    JSON_VALUE_ARRAY(custom_metrics.security, '$.sri-integrity') AS sris,
     INT64(custom_metrics.element_count.script) AS num_scripts
   FROM
     `httparchive.crawl.pages`

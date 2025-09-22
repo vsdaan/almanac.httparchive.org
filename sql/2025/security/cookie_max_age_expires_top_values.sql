@@ -34,7 +34,7 @@ WITH max_age_values AS (
   FROM
     `httparchive.crawl.requests`,
     UNNEST(response_headers) AS rh,
-    UNNEST(JSON_QUERY_ARRAY(getCookieAgeValues(rh.value, INT64(summary.startedDateTime))), '$.maxAge') AS max_age_value
+    UNNEST(JSON_QUERY_ARRAY(getCookieAgeValues(rh.value, INT64(summary.startedDateTime)), '$.maxAge')) AS max_age_value
   WHERE
     date = '2025-07-01' AND
     is_root_page AND

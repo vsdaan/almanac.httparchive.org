@@ -19,7 +19,7 @@ WHERE
   is_root_page
 GROUP BY
   client,
-  rank
+  req.rank
 ORDER BY
   client,
   rank_grouping

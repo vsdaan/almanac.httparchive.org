@@ -23,7 +23,8 @@ FROM (
   GROUP BY
     client,
     request_host,
-    issuer
+    issuer,
+    date
 )
 GROUP BY
   client,
