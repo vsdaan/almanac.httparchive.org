@@ -7,7 +7,7 @@ WITH total_iframe_count AS (
     date,
     SUM(SAFE_CAST(JSON_VALUE(custom_metrics.num_iframes) AS INT64)) AS total_iframes
   FROM
-    `httparchive.all.pages`
+    `httparchive.crawl.pages`
   WHERE
     (date = '2022-06-01' OR date = '2023-06-01' OR date = '2023-12-01' OR date = '2024-03-01' OR date = '2024-04-01' OR date = '2024-05-01' OR date = '2025-07-01') AND
     is_root_page
@@ -43,7 +43,7 @@ FROM (
       page AS url,
       JSON_EXTRACT_ARRAY(JSON_QUERY(custom_metrics.security), '$.iframe-allow-sandbox') AS iframeAttrs
     FROM
-      `httparchive.all.pages`
+      `httparchive.crawl.pages`
     WHERE
       (date = '2022-06-01' OR date = '2023-06-01' OR date = '2023-12-01' OR date = '2024-03-01' OR date = '2024-04-01' OR date = '2024-05-01' OR date = '2025-07-01') AND
       is_root_page

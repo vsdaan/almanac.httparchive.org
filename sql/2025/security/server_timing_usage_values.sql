@@ -56,7 +56,7 @@ WITH parsed_server_timing AS (
     JSON_EXTRACT(parseServerTiming(response_headers.value), '$.dur') AS dur,
     JSON_EXTRACT(parseServerTiming(response_headers.value), '$.desc') AS desc1
   FROM
-    `httparchive.all.requests`,
+    `httparchive.crawl.requests`,
     UNNEST(response_headers) AS response_headers
   WHERE
     date = '2025-07-01' AND

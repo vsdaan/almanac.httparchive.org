@@ -27,6 +27,7 @@ FROM (
 )
 GROUP BY
   client,
-  issuer
+  issuer,
+  date
 ORDER BY
   pct DESC
