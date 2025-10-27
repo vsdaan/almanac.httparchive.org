@@ -20,6 +20,7 @@ FROM (
   WHERE
     date = '2025-07-01' AND
     is_root_page AND
+    is_main_document AND
     LOWER(response_headers.name) = 'strict-transport-security'
 )
 GROUP BY
