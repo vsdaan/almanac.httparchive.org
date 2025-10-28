@@ -41,10 +41,10 @@ FROM (
       `httparchive.crawl.requests`,
       UNNEST(response_headers) AS response_headers
     WHERE
-      date = '2025-07-01'
-      AND is_root_page
-      AND is_main_document
-      AND LOWER(response_headers.name) = 'content-security-policy'
+      date = '2025-07-01' AND
+      is_root_page AND
+      is_main_document AND
+      LOWER(response_headers.name) = 'content-security-policy'
     GROUP BY
       client, url
   )

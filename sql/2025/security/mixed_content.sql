@@ -10,7 +10,7 @@ SELECT
   COUNT(DISTINCT(CASE WHEN REGEXP_CONTAINS(page, r'https://.*') AND REGEXP_CONTAINS(url, r'http://.*') THEN page END)) AS count_pages_over_https_with_http_reference,
   COUNT(DISTINCT(CASE WHEN REGEXP_CONTAINS(page, r'https://.*') AND REGEXP_CONTAINS(url, r'http://.*') THEN page END)) / COUNT(DISTINCT(CASE WHEN REGEXP_CONTAINS(page, r'https://.*') THEN page END)) AS pct_pages_over_https_with_http_reference
 FROM
-  `httparchive.crawl.requests` as req
+  `httparchive.crawl.requests` AS req
 JOIN
   `httparchive.crawl.pages`
 USING (client, page, date, is_root_page)
