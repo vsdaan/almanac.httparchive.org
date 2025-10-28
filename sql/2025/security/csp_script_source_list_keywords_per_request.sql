@@ -24,29 +24,32 @@ FROM (
   SELECT
     client,
     COUNT(0) AS total_pages_with_csp,
-    COUNTIF(csp_header IS NOT NULL) AS freq_csp,
-    COUNTIF(REGEXP_CONTAINS(csp_header, '(?i)(default|script)-src')) AS freq_default_script_src,
-    COUNTIF(REGEXP_CONTAINS(csp_header, '(?i)(default|script)-src[^;]+strict-dynamic')) AS freq_strict_dynamic,
-    COUNTIF(REGEXP_CONTAINS(csp_header, '(?i)(default|script)-src[^;]+nonce-')) AS freq_nonce,
-    COUNTIF(REGEXP_CONTAINS(csp_header, '(?i)(default|script)-src[^;]+unsafe-inline')) AS freq_script_unsafe_inline,
-    COUNTIF(REGEXP_CONTAINS(csp_header, '(?i)(default|script)-src[^;]+unsafe-eval')) AS freq_script_unsafe_eval,
-    COUNTIF(REGEXP_CONTAINS(csp_header, '(?i)unsafe-inline')) AS freq_unsafe_inline,
-    COUNTIF(REGEXP_CONTAINS(csp_header, '(?i)unsafe-eval')) AS freq_unsafe_eval
+    COUNTIF(csp_combined IS NOT NULL) AS freq_csp,
+    COUNTIF(REGEXP_CONTAINS(csp_combined, '(?i)(default|script)-src')) AS freq_default_script_src,
+    COUNTIF(REGEXP_CONTAINS(csp_combined, '(?i)(default|script)-src[^;]+strict-dynamic')) AS freq_strict_dynamic,
+    COUNTIF(REGEXP_CONTAINS(csp_combined, '(?i)(default|script)-src[^;]+nonce-')) AS freq_nonce,
+    COUNTIF(REGEXP_CONTAINS(csp_combined, '(?i)(default|script)-src[^;]+unsafe-inline')) AS freq_script_unsafe_inline,
+    COUNTIF(REGEXP_CONTAINS(csp_combined, '(?i)(default|script)-src[^;]+unsafe-eval')) AS freq_script_unsafe_eval,
+    COUNTIF(REGEXP_CONTAINS(csp_combined, '(?i)unsafe-inline')) AS freq_unsafe_inline,
+    COUNTIF(REGEXP_CONTAINS(csp_combined, '(?i)unsafe-eval')) AS freq_unsafe_eval
   FROM (
     SELECT
       client,
-      response_headers.value AS csp_header
+      url,
+      STRING_AGG(response_headers.value, '; ') AS csp_combined
     FROM
       `httparchive.crawl.requests`,
       UNNEST(response_headers) AS response_headers
     WHERE
-      date = '2025-07-01' AND
-      is_root_page AND
-      is_main_document AND
-      LOWER(response_headers.name) = 'content-security-policy'
+      date = '2025-07-01'
+      AND is_root_page
+      AND is_main_document
+      AND LOWER(response_headers.name) = 'content-security-policy'
+    GROUP BY
+      client, url
   )
   GROUP BY
     client
 )
 ORDER BY
-  client
+  client;
