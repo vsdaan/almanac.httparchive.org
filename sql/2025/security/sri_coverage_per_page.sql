@@ -1,7 +1,7 @@
 #standardSQL
 # Section: Content Inclusion - Subresource Integriy
 # Question: How many scripts on a page have the integrity attribute? (percentage)
-CREATE TEMP FUNCTION getNumScriptElements(sris ARRAY<STRING>) AS (
+CREATE TEMP FUNCTION getNumScriptElements(sris ARRAY<JSON>) AS (
   (SELECT COUNT(0) FROM UNNEST(sris) AS sri WHERE JSON_EXTRACT_SCALAR(sri, '$.tagname') = 'script')
 );
 
@@ -12,7 +12,7 @@ SELECT
 FROM (
   SELECT
     client,
-    JSON_VALUE_ARRAY(custom_metrics.security, '$.sri-integrity') AS sris,
+    JSON_EXTRACT_ARRAY(custom_metrics.security, '$.sri-integrity') AS sris,
     INT64(custom_metrics.element_count.script) AS num_scripts
   FROM
     `httparchive.crawl.pages`
